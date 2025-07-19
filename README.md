@@ -1,12 +1,42 @@
-# React + Vite
+# ALX React App 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the **ALX React App** – a simple and beginner-friendly project created as part of the **ALX Frontend ReactJS Curriculum**.
 
-Currently, two official plugins are available:
+This project introduces core React concepts including **JSX**, **functional components**, and **props**. You'll learn to build a modular UI using multiple components and understand how to pass data between them.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 📌 Project Objectives
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Understand and use JSX (JavaScript XML)
+- Create and structure functional React components
+- Use props to pass dynamic data into components
+- Organize components in a reusable, maintainable way
+- Run and view a React application using Vite
+
+---
+
+---
+
+## 🧱 Components and Code
+
+### 1️⃣ WelcomeMessage.jsx
+
+A simple component that introduces JSX.
+
+```jsx
+// src/components/WelcomeMessage.jsx
+function WelcomeMessage() {
+  return (
+    <div>
+      <h1>Hello everyone, I am learning React at ALX!</h1>
+      <p>This is a simple JSX component.</p>
+      <p>I am learning about JSX!</p>
+    </div>
+  );
+}
+
+export default WelcomeMessage;
+
+
+

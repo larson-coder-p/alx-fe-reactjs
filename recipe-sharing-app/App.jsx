@@ -1,15 +1,47 @@
 // src/App.jsx
 import React from 'react';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import RecipeList from './components/RecipeList';
 import AddRecipeForm from './components/AddRecipeForm';
+import RecipeDetails from './components/RecipeDetails';
 
 function App() {
   return (
-    <div style={{ maxWidth: '600px', margin: '40px auto', fontFamily: 'Arial, sans-serif' }}>
-      <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Recipe Sharing App</h1>
-      <AddRecipeForm />
-      <RecipeList />
-    </div>
+    <BrowserRouter>
+      <div style={{ maxWidth: '700px', margin: '20px auto', fontFamily: 'Arial, sans-serif' }}>
+        <nav style={{ marginBottom: '20px' }}>
+          <Link to="/" style={{ marginRight: '20px' }}>
+            Home
+          </Link>
+          <Link to="/add">Add Recipe</Link>
+        </nav>
+
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <h1>Recipe Sharing App</h1>
+                <RecipeList />
+              </>
+            }
+          />
+          <Route
+            path="/add"
+            element={
+              <>
+                <h1>Add New Recipe</h1>
+                <AddRecipeForm />
+              </>
+            }
+          />
+          <Route path="/recipes/:id" element={<RecipeDetails />} />
+          
+          {/* Optional: catch all for unknown routes */}
+          <Route path="*" element={<p>Page not found.</p>} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 

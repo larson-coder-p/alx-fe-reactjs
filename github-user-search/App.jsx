@@ -1,59 +1,64 @@
+// src/App.jsx
 import React, { useState } from 'react';
-import SearchBar from './components/SearchBar';
-import UserList from './components/UserList';
-import { searchUsers } from './services/githubApi';
+import Search from './components/Search';
+import { fetchUserData } from './services/githubServices';
 
-function App() {
-  const [users, setUsers] = useState([]);
+const App = () => {
+  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Callback to perform GitHub user search
-  const handleSearch = async (query) => {
-    if (!query) {
-      setUsers([]);
-      return;
-    }
-
+  // Called by Search component on form submit with username
+  const handleSearch = async (username) => {
     setLoading(true);
     setError(null);
+    setUserData(null);
 
     try {
-      const data = await searchUsers(query);
-      setUsers(data.items || []); // GitHub API returns results in `items`
+      const data = await fetchUserData(username);
+      setUserData(data);
     } catch (err) {
-      setError('Failed to fetch users. Please try again later.');
-      setUsers([]);
+      setError('Looks like we can’t find the user');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div
-      style={{
-        maxWidth: 700,
-        margin: '40px auto',
-        fontFamily: 'Arial, sans-serif',
-        padding: '20px',
-      }}
-    >
+    <div style={{ maxWidth: 600, margin: '40px auto', fontFamily: 'Arial, sans-serif', padding: 20 }}>
       <h1>GitHub User Search</h1>
-
-      <SearchBar onSearch={handleSearch} />
+      <Search onSearch={handleSearch} />
 
       {loading && <p>Loading...</p>}
 
-      {error && (
-        <p style={{ color: 'red', marginTop: 10 }}>
-          {error}
-        </p>
-      )}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      <UserList users={users} />
+      {userData && (
+        <div style={{ marginTop: 20 }}>
+          <img
+            src={userData.avatar_url}
+            alt={`${userData.login} avatar`}
+            width={100}
+            height={100}
+            style={{ borderRadius: '50%' }}
+          />
+          <h2>{userData.name || userData.login}</h2>
+          <p>
+            <a href={userData.html_url} target="_blank" rel="noopener noreferrer">
+              View GitHub Profile
+            </a>
+          </p>
+          {userData.bio && <p>{userData.bio}</p>}
+          <p>
+            Followers: {userData.followers} | Following: {userData.following}
+          </p>
+          <p>Public Repos: {userData.public_repos}</p>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default App;
+
 

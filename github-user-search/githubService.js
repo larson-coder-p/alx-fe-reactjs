@@ -1,24 +1,46 @@
 // src/services/githubService.js
 import axios from 'axios';
 
-// Base URL for GitHub user API endpoint
-const BASE_URL = 'https://api.github.com/users/';
+const BASE_URL = 'https://api.github.com/search/users';
+
+const githubToken = import.meta.env.VITE_APP_GITHUB_API_KEY;
+
+const api = axios.create({
+  baseURL: BASE_URL,
+  headers: githubToken
+    ? { Authorization: `token ${githubToken}` }
+    : {},
+});
 
 /**
- * Fetch GitHub user data by username
- * @param {string} username
- * @returns {Promise<Object>} GitHub user data
+ * Search GitHub users with advanced filters
+ * @param {Object} params { username, location, minRepos }
+ * @returns {Promise<Object>} GitHub API search result
  */
-export const fetchUserData = async (username) => {
-  try {
-    const response = await axios.get(`${BASE_URL}${username}`);
-    return response.data;
-  } catch (error) {
-    if (error.response && error.response.status === 404) {
-      throw new Error('User not found');
-    }
-    throw new Error('An error occurred while fetching data');
+export async function searchUsersAdvanced({ username, location, minRepos }) {
+  // Build query string parts
+  let query = '';
+
+  if (username) query += `${username}`;
+
+  if (location) query += ` location:${location}`;
+
+  if (minRepos && !isNaN(Number(minRepos))) query += ` repos:>=${Number(minRepos)}`;
+
+  // Trim and encode query string
+  query = query.trim();
+
+  if (!query) {
+    // No search criteria, return empty result
+    return { items: [] };
   }
-};
+
+  const response = await api.get('', {
+    params: { q: query, per_page: 30 },
+  });
+
+  return response.data;
+}
+
 
 
